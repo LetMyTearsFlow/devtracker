@@ -1,6 +1,6 @@
 import json
 import logging
-from config import data_path
+from src.config import data_path
 
 def load_data(path) -> tuple[dict, list]:
     """
@@ -8,7 +8,7 @@ def load_data(path) -> tuple[dict, list]:
     :return: projects dictionary，sessions list
     """
     try:
-        with open(path, 'r') as f:
+        with open(path, 'r', encoding='utf-8') as f:
             data = json.load(f)
             projects = data['projects']
             sessions = data['sessions']
