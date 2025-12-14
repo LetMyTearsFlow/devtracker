@@ -1,3 +1,4 @@
+import json
 from unittest import TestCase
 from src.storage import Storage
 from pathlib import Path
@@ -5,7 +6,8 @@ from pathlib import Path
 
 class Test(TestCase):
     def SetUp(self):
-        self.storage = Storage(Path(__file__).parent / 'fixture')
+        pass
+
     def test_load_data(self):
         # correct_data_path = r'C:\dev\01_workspace\devtracker\test\fixture\correct_data.json'
         correct_data_path = Path(__file__).parent / 'fixture' / 'correct_data.json'
@@ -32,3 +34,24 @@ class Test(TestCase):
         save_data_path = Path(__file__).parent / 'fixture' / 'save_data.json'
         projects = {"cli-demo": "/Users/student/code/cli-demo"}
         sessions = [{"project": "cli-demo", "start_time": "2023-10-27T10:00:00", "duration_seconds": 3600, "note": ""}]
+        storage = Storage(save_data_path)
+        storage.projects = projects
+        storage.sessions = sessions
+        storage.save_data()
+        # check if the file exist
+        with open(save_data_path) as f:
+            data = json.load(f)
+            expected_data = {
+                "projects": {
+                    "cli-demo": "/Users/student/code/cli-demo"
+                },
+                "sessions": [
+                    {
+                        "project": "cli-demo",
+                        "start_time": "2023-10-27T10:00:00",
+                        "duration_seconds": 3600,
+                        "note": ""
+                    }
+                ]
+            }
+            self.assertEqual(expected_data, data)
