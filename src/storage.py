@@ -34,7 +34,7 @@ class Storage:
 
 
     def save_data(self):
-        with open(data_path, 'w') as f:
+        with open(self.path, 'w') as f:
             data = {'projects': self.projects, 'sessions': self.sessions}
             try:
                 json.dump(data, f)
