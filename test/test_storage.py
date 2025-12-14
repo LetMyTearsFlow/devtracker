@@ -55,3 +55,19 @@ class Test(TestCase):
                 ]
             }
             self.assertEqual(expected_data, data)
+
+    def test_add_project(self):
+        add_project_path = Path(__file__).parent / 'fixture' / 'add_project.json'
+        storage = Storage(add_project_path)
+        name = "add-project"
+        path = "/Users/student/code/add-project"
+        storage.add_project(name, path)
+        with open(add_project_path) as f:
+            data = json.load(f)
+            expected_data = {
+                "projects": {
+                    "add-project": "/Users/student/code/add-project"
+                },
+                "sessions": []
+            }
+            self.assertEqual(expected_data, data)
