@@ -71,3 +71,19 @@ class Test(TestCase):
                 "sessions": []
             }
             self.assertEqual(expected_data, data)
+
+    def test_add_session(self):
+        add_session_path = Path(__file__).parent / 'fixture' / 'add_session.json'
+        storage = Storage(add_session_path)
+        session = {"project": "cli-demo",
+                   "start_time": "2023-10-27T10:00:00",
+                   "duration_seconds": 3600,
+                   "note": "123456"}
+        storage.add_session(session)
+        with open(add_session_path) as f:
+            data = json.load(f)
+            expected_data = {
+                "projects": {},
+                "sessions": [session]
+            }
+            self.assertEqual(expected_data, data)
