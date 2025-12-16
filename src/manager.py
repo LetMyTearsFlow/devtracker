@@ -2,14 +2,13 @@ import logging
 from pathlib import Path
 class Manager:
 
-    def scan_directory(self, root: str) -> list[Path]:
+    def scan_directory(self, root: Path) -> list[Path]:
         """
         scans a directory and its subdirectories.
         directory with . beginning are ignored.
         :param root: root directory
         :return: a list of subdirectories
         """
-        root = Path(root)
         path_list = []
         self._scan_directory_recursively(root, path_list)
         return path_list
