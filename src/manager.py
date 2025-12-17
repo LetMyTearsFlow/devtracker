@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
-from src.storage import Storage
+
+from storage import Storage
 
 
 class Manager:
@@ -40,7 +41,10 @@ class Manager:
 
                 self._scan_directory_recursively(path_item, path_list)
 
-    def scan_projects(self, root: Path):
+    def scan_projects(self, root: Path | str):
+        if type(root) != Path:
+            root = Path(root)
+
         path_list = self.scan_directory(root)
         project_list = []
         for path in path_list:
@@ -54,5 +58,3 @@ class Manager:
         print(f"In folder {root}: found {len(project_list)} projects:")
         for project in project_list:
             print(f"\t{project}")
-
-

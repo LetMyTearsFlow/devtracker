@@ -1,7 +1,10 @@
 import typer
+from pathlib import Path
+
+from manager import Manager
 
 app = typer.Typer()
-
+manager = Manager()
 
 @app.command()
 def scan(path: str) -> None:
@@ -11,6 +14,7 @@ def scan(path: str) -> None:
     :param path:文件夹路径
     """
     print(path)
+    manager.scan_projects(path)
 
 @app.command()
 def list() -> None:
