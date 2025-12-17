@@ -2,6 +2,7 @@ import json
 import logging
 from src.config import data_path
 
+
 class Storage:
     def __init__(self, path):
         self.path = path
@@ -32,7 +33,6 @@ class Storage:
             logging.error("key error")
             return {}, []
 
-
     def save_data(self):
         with open(self.path, 'w') as f:
             data = {'projects': self.projects, 'sessions': self.sessions}
@@ -41,14 +41,18 @@ class Storage:
             except json.decoder.JSONDecodeError:
                 logging.error("json decode error")
 
-
     def add_project(self, name, path):
         # add a new project into data
+        # the data going to be dumped in json must be string
+        name = str(name.name)
+        path = str(path)
         self.projects[name] = path
         self.save_data()
 
     def add_project_list(self, name_list, path_list):
         for name, path in zip(name_list, path_list):
+            name = str(name.name) # get the last name as project name
+            path = str(path)
             self.projects[name] = path
         self.save_data()
 
