@@ -1,6 +1,11 @@
 import logging
 from pathlib import Path
+from src.storage import Storage
+
+
 class Manager:
+    def __init__(self):
+        self.storage = Storage(Path(__file__).parent / 'storage')
 
     def scan_directory(self, root: Path) -> list[Path]:
         """
@@ -34,5 +39,20 @@ class Manager:
                 path_list.append(path_item)
 
                 self._scan_directory_recursively(path_item, path_list)
+
+    def scan_projects(self, root: Path):
+        path_list = self.scan_directory(root)
+        project_list = []
+        for path in path_list:
+            for folder in path.iterdir():
+                if folder.name.startswith(".git"):
+                    project_list.append(path)
+                    break
+        # convert path to absolute path str
+        absolute_path_list = [str(project.resolve()) for project in project_list]
+        self.storage.add_project_list(project_list, absolute_path_list)
+        print(f"In folder {root}: found {len(project_list)} projects:")
+        for project in project_list:
+            print(f"\t{project}")
 
 
