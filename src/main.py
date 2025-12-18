@@ -21,7 +21,7 @@ def list() -> None:
     """
     用表格列表显示所有项目的项目名，最后修改时间，Git状态
     """
-    pass
+    manager.list_projects()
 
 @app.command()
 def start(project_name: str) -> None:

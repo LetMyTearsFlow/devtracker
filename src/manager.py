@@ -3,10 +3,15 @@ from pathlib import Path
 
 from storage import Storage
 
+from rich.console import Console
+from rich.table import Table
+
+console = Console()
+
 
 class Manager:
     def __init__(self):
-        self.storage = Storage(Path(__file__).parent / 'storage')
+        self.storage = Storage(Path(__file__).parent.parent / 'data' / 'data.json')
 
     def scan_directory(self, root: Path) -> list[Path]:
         """
@@ -58,3 +63,16 @@ class Manager:
         print(f"In folder {root}: found {len(project_list)} projects:")
         for project in project_list:
             print(f"\t{project}")
+
+    def list_projects(self):
+
+        # create table to print
+        table = Table(title="Projects", show_header=True, header_style="bold magenta")
+        table.add_column("Name", style="dim", width=12)
+        table.add_column("Path")
+
+        projects = self.storage.get_projects()
+        for name in projects:
+            table.add_row(name, projects[name])
+
+        console.print(table)
