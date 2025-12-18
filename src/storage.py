@@ -59,3 +59,6 @@ class Storage:
     def add_session(self, session_dict):
         self.sessions.append(session_dict)
         self.save_data()
+
+    def get_projects(self):
+        return self.projects
