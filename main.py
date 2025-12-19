@@ -1,7 +1,7 @@
 import typer
 from pathlib import Path
 
-from manager import Manager
+from src.manager import Manager
 
 app = typer.Typer()
 manager = Manager()

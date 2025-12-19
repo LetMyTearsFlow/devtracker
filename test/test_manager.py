@@ -18,3 +18,8 @@ class TestManager(TestCase):
         manager.scan_projects(root)
         self.assertIn("folder2", manager.storage.projects)
         self.assertIn("folder3", manager.storage.projects)
+
+    def test_check_git_status(self):
+        manager = Manager()
+        path = Path(__file__).parent / 'fixture' / 'test_scan_directory' / 'folder3'
+        manager.check_git_status(path)

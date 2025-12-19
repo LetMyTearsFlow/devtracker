@@ -1,6 +1,6 @@
 import json
 import logging
-from config import data_path
+from src.config import data_path
 
 
 class Storage:
