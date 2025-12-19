@@ -1,7 +1,8 @@
 import logging
+import subprocess
 from pathlib import Path
 
-from storage import Storage
+from src.storage import Storage
 
 from rich.console import Console
 from rich.table import Table
@@ -76,3 +77,19 @@ class Manager:
             table.add_row(name, projects[name])
 
         console.print(table)
+
+    def check_git_status(self, path: Path):
+        # check this is tracked project
+        assert str(path) in self.storage.get_projects().values()
+        result = subprocess.run(['git', 'status', '--porcelain'], cwd=str(path), text=True, capture_output=True,
+                                check=True)
+
+        status_output = result.stdout
+        if not status_output:
+            console.print("Working tree is clean.")
+        else:
+            console.print("Detected changes:")
+            console.print(status_output)
+
+
+
