@@ -2,9 +2,11 @@ import typer
 from pathlib import Path
 
 from src.manager import Manager
+from src.storage import Storage
 
 app = typer.Typer()
 manager = Manager()
+storage = Storage(Path(__file__).parent / 'data' / 'data.json')
 
 
 @app.command()
@@ -19,6 +21,8 @@ def scan(path: str) -> None:
     print(f"{len(projects)} project(s) found:")
     for project in projects:
         print(project)
+    names = [project.name for project in projects]
+    storage.add_project_list(names, projects)
 
 
 @app.command()

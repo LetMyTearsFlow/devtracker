@@ -1,5 +1,7 @@
 import json
 import logging
+from pathlib import Path
+
 from src.config import data_path
 
 
@@ -44,15 +46,16 @@ class Storage:
     def add_project(self, name, path):
         # add a new project into data
         # the data going to be dumped in json must be string
-        name = str(name.name)
-        path = str(path)
+        if isinstance(path, Path):
+            path = str(path.resolve())
         self.projects[name] = path
         self.save_data()
 
     def add_project_list(self, name_list, path_list):
         for name, path in zip(name_list, path_list):
-            name = str(name.name) # get the last name as project name
-            path = str(path)
+            name = str(name) # get the last name as project name
+            if isinstance(path, Path):
+                path = str(path.resolve())
             self.projects[name] = path
         self.save_data()
 
