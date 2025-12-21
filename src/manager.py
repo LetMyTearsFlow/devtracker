@@ -1,5 +1,6 @@
 import logging
 import subprocess
+from enum import Enum
 from pathlib import Path
 
 from src.storage import Storage
@@ -8,11 +9,12 @@ from rich.console import Console
 from rich.table import Table
 
 console = Console()
+class GitStatus(Enum):
+    CLEAN = "clean"
+    NOT_CLEAN = "not_clean"
 
 
 class Manager:
-    def __init__(self):
-        self.storage = Storage(Path(__file__).parent.parent / 'data' / 'data.json')
 
     def scan_directory(self, root: Path) -> list[Path]:
         """
@@ -48,16 +50,14 @@ class Manager:
 
                 self._scan_directory_recursively(path_item, path_list)
 
+    @staticmethod
+    def check_git_status(path: Path):
 
-    def check_git_status(self, path: Path):
-        # check this is tracked project
-        assert str(path) in self.storage.get_projects().values()
         result = subprocess.run(['git', 'status', '--porcelain'], cwd=str(path), text=True, capture_output=True,
                                 check=True)
 
         status_output = result.stdout
         if not status_output:
-            console.print("Working tree is clean.")
+            return GitStatus.CLEAN, ""
         else:
-            console.print("Detected changes:")
-            console.print(status_output)
+            return GitStatus.NOT_CLEAN, status_output
