@@ -6,6 +6,7 @@ from src.manager import Manager
 app = typer.Typer()
 manager = Manager()
 
+
 @app.command()
 def scan(path: str) -> None:
     """
@@ -14,7 +15,11 @@ def scan(path: str) -> None:
     :param path:文件夹路径
     """
     print(path)
-    manager.scan_projects(path)
+    projects = manager.scan_directory(Path(path))
+    print(f"{len(projects)} project(s) found:")
+    for project in projects:
+        print(project)
+
 
 @app.command()
 def list() -> None:
@@ -22,6 +27,7 @@ def list() -> None:
     用表格列表显示所有项目的项目名，最后修改时间，Git状态
     """
     manager.list_projects()
+
 
 @app.command()
 def start(project_name: str) -> None:
@@ -32,6 +38,7 @@ def start(project_name: str) -> None:
     """
     pass
 
+
 @app.command()
 def stats():
     """
@@ -39,6 +46,7 @@ def stats():
     显示最近5条学习日志。
     """
     pass
+
 
 if __name__ == "__main__":
     app()
