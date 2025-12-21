@@ -2,6 +2,7 @@ from pathlib import Path
 from unittest import TestCase
 from src.manager import Manager
 
+
 class TestManager(TestCase):
 
     def test_scan_directory(self):

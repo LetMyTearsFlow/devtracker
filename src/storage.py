@@ -53,7 +53,7 @@ class Storage:
 
     def add_project_list(self, name_list, path_list):
         for name, path in zip(name_list, path_list):
-            name = str(name) # get the last name as project name
+            name = str(name)  # get the last name as project name
             if isinstance(path, Path):
                 path = str(path.resolve())
             self.projects[name] = path
