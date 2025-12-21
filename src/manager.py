@@ -48,18 +48,6 @@ class Manager:
 
                 self._scan_directory_recursively(path_item, path_list)
 
-    def list_projects(self):
-
-        # create table to print
-        table = Table(title="Projects", show_header=True, header_style="bold magenta")
-        table.add_column("Name", style="dim", width=12)
-        table.add_column("Path")
-
-        projects = self.storage.get_projects()
-        for name in projects:
-            table.add_row(name, projects[name])
-
-        console.print(table)
 
     def check_git_status(self, path: Path):
         # check this is tracked project

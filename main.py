@@ -1,12 +1,16 @@
 import typer
 from pathlib import Path
 
+from rich.console import Console
+from rich.table import Table
+
 from src.manager import Manager
 from src.storage import Storage
 
 app = typer.Typer()
 manager = Manager()
 storage = Storage(Path(__file__).parent / 'data' / 'data.json')
+console = Console()
 
 
 @app.command()
@@ -30,7 +34,15 @@ def list() -> None:
     """
     用表格列表显示所有项目的项目名，最后修改时间，Git状态
     """
-    manager.list_projects()
+    table = Table(title="Projects", show_header=True, header_style="bold magenta")
+    table.add_column("Name", style="dim", width=12)
+    table.add_column("Path")
+
+    projects = storage.get_projects()
+    for name in projects:
+        table.add_row(name, projects[name])
+
+    console.print(table)
 
 
 @app.command()
