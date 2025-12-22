@@ -4,7 +4,7 @@ from pathlib import Path
 from rich.console import Console
 from rich.table import Table
 
-from src.manager import Manager
+from src.manager import Manager, GitStatus
 from src.storage import Storage
 
 app = typer.Typer()
@@ -37,10 +37,16 @@ def list() -> None:
     table = Table(title="Projects", show_header=True, header_style="bold magenta")
     table.add_column("Name", style="dim", width=12)
     table.add_column("Path")
+    table.add_column("Status", style="purple4", width=12)
 
     projects = storage.get_projects()
     for name in projects:
-        table.add_row(name, projects[name])
+        status, _ = manager.check_git_status(projects[name])
+        if status == GitStatus.CLEAN:
+            status_str = "Clean"
+        else:
+            status_str = "Not Clean"
+        table.add_row(name, projects[name], status_str)
 
     console.print(table)
 
