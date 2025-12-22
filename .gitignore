@@ -2,3 +2,4 @@
 .venv/
 /data/data.json
 /test/fixture/
+**/__pycache__
