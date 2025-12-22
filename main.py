@@ -62,6 +62,7 @@ def start() -> None:
     """
     projects = list(storage.get_projects().keys())
     index = 0
+
     def render():
         table = Table(show_header=False, box=None)
         for i, project in enumerate(projects):
@@ -85,9 +86,6 @@ def start() -> None:
             live.update(render())
 
     console.print(f"选择了{projects[index]}")
-
-
-
 
 
 @app.command()
