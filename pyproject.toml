@@ -4,6 +4,7 @@ version = "25.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
+    "readchar>=4.2.1",
     "rich>=14.2.0",
     "typer>=0.20.0",
 ]

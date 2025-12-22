@@ -1,8 +1,11 @@
+import readchar
 import typer
 from pathlib import Path
 
 from rich.console import Console
 from rich.table import Table
+from rich.text import Text
+from rich.live import Live
 
 from src.manager import Manager, GitStatus
 from src.storage import Storage
@@ -30,7 +33,7 @@ def scan(path: str) -> None:
 
 
 @app.command()
-def list() -> None:
+def show() -> None:
     """
     用表格列表显示所有项目的项目名，最后修改时间，Git状态
     """
@@ -52,13 +55,39 @@ def list() -> None:
 
 
 @app.command()
-def start(project_name: str) -> None:
+def start() -> None:
     """
     开始对某个项目进行专注学习。终端持续显示计时器，按C退出计时，计时结束后提醒用户输入学到什么/完成什么功能
     自动保存项目名，日期，时长，学习内容。
-    :param project_name:
     """
-    pass
+    projects = list(storage.get_projects().keys())
+    index = 0
+    def render():
+        table = Table(show_header=False, box=None)
+        for i, project in enumerate(projects):
+            if i == index:
+                table.add_row(Text(f"> {project}"), style="magenta")
+            else:
+                table.add_row(f"> {project}", style="blue")
+        return table
+
+    with Live(render(), console=console, refresh_per_second=30) as live:
+        while True:
+            key = readchar.readkey()
+            if key == readchar.key.UP:
+                index = (index - 1) % len(projects)
+            elif key == readchar.key.DOWN:
+                index = (index + 1) % len(projects)
+            elif key == readchar.key.ENTER:
+
+                break
+
+            live.update(render())
+
+    console.print(f"选择了{projects[index]}")
+
+
+
 
 
 @app.command()
