@@ -9,6 +9,7 @@ from rich.live import Live
 
 from src.manager import Manager, GitStatus
 from src.storage import Storage
+from src.timer import timer
 
 app = typer.Typer()
 manager = Manager()
@@ -86,6 +87,8 @@ def start() -> None:
             live.update(render())
 
     console.print(f"选择了{projects[index]}")
+    project_name = projects[index]
+    timer(project_name)
 
 
 @app.command()
