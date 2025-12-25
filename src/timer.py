@@ -4,6 +4,8 @@ from rich.live import Live
 from rich.console import Console
 from rich.text import Text
 import datetime
+import threading
+import keyboard
 
 console = Console()
 
@@ -17,6 +19,17 @@ def timer(project_name):
         text.stylize("bold magenta")
         return text
 
+    exit_event = threading.Event()
+    def listen_exit():
+        keyboard.wait('q')
+        exit_event.set()
+
+    threading.Thread(target=listen_exit, daemon=True).start()
+
     with Live(render(), console=console, refresh_per_second=30) as live:
-        while True:
+        while not exit_event.is_set():
             live.update(render())
+            time.sleep(0.05)
+
+    # return total time
+    return int(time.time() - start_time)
