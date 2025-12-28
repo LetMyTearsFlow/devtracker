@@ -20,16 +20,18 @@ def timer(project_name):
         return text
 
     exit_event = threading.Event()
-    def listen_exit():
-        keyboard.wait('q')
+
+    def on_q():
         exit_event.set()
 
-    threading.Thread(target=listen_exit, daemon=True).start()
+    keyboard.add_hotkey('q', on_q, suppress=True)
 
     with Live(render(), console=console, refresh_per_second=30) as live:
         while not exit_event.is_set():
             live.update(render())
             time.sleep(0.05)
 
+    # unhook all hotkey
+    keyboard.unhook_all_hotkeys()
     # return total time
     return int(time.time() - start_time)
