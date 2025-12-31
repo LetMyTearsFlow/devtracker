@@ -34,4 +34,4 @@ def timer(project_name):
     # unhook all hotkey
     keyboard.unhook_all_hotkeys()
     # return total time
-    return int(time.time() - start_time)
+    return start_time, int(time.time() - start_time)

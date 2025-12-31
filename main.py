@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import readchar
 import typer
 from pathlib import Path
@@ -10,6 +12,7 @@ from rich.live import Live
 from src.manager import Manager, GitStatus
 from src.storage import Storage
 from src.timer import timer
+from src.note import note_from_external
 
 app = typer.Typer()
 manager = Manager()
@@ -88,7 +91,19 @@ def start() -> None:
 
     console.print(f"选择了{projects[index]}")
     project_name = projects[index]
-    timer(project_name)
+    start_time, duration_time = timer(project_name)
+
+    # user note
+    note = note_from_external(project_name)
+
+    # build a session object
+    session = {
+        "project": project_name,
+        "start_time": datetime.fromtimestamp(start_time).strftime("%Y-%m-%dT%H:%M:%S"),
+        "duration_seconds": duration_time,
+        "note": note
+    }
+    storage.add_session(session)
 
 
 @app.command()
