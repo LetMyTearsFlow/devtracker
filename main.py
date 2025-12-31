@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import readchar
 import typer
@@ -112,7 +112,21 @@ def stats():
     显示本周学习时长（每周从周一开始）
     显示最近5条学习日志。
     """
-    pass
+
+    def in_current_week(date_str: str):
+        # find the current week's Monday
+        today = datetime.today()
+        monday = today - timedelta(days=today.weekday())
+        sunday = monday + timedelta(days=6)
+        date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
+        return monday <= date <= sunday
+
+    sessions_this_week = [session for session in storage.sessions if in_current_week(session["start_time"])]
+    total_time = sum(session["duration_seconds"] for session in sessions_this_week)
+    print(f"This week's working time:{total_time}s, well done!")
+    print(f"past sessions")
+    for session in storage.sessions:
+        print(session['note'])
 
 
 if __name__ == "__main__":
