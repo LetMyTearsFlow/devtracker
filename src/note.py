@@ -22,6 +22,7 @@ def note_from_external(
         if edited is None:
             return initial_text
 
-        result = edited.rstrip("\n")
+        lines = edited.split("\n")
+        result = "\n".join([line for line in lines if not line.startswith("#")])
 
         return result

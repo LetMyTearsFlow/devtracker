@@ -94,7 +94,7 @@ def start() -> None:
     start_time, duration_time = timer(project_name)
 
     # user note
-    note = note_from_external(project_name)
+    note = note_from_external("# leave your note under this line")
 
     # build a session object
     session = {
@@ -123,10 +123,19 @@ def stats():
 
     sessions_this_week = [session for session in storage.sessions if in_current_week(session["start_time"])]
     total_time = sum(session["duration_seconds"] for session in sessions_this_week)
+    if len(sessions_this_week) > 5:
+        past_sessions = sessions_this_week[-5:]
+    else:
+        past_sessions = sessions_this_week
     print(f"This week's working time:{total_time}s, well done!")
     print(f"past sessions")
-    for session in storage.sessions:
-        print(session['note'])
+    note_table = Table(show_header=False)
+    note_table.add_column("Name", style="dim", width=12)
+    note_table.add_column("Note", style="dim")
+    for session in past_sessions:
+        note_table.add_row(session["project"], session["note"])
+    console.print(note_table)
+
 
 
 if __name__ == "__main__":
